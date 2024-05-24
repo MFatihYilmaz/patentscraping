@@ -5,7 +5,6 @@ from collections import Counter
 import nltk
 from nltk.tokenize import word_tokenize, sent_tokenize
 
-
 def analyze_text(text):
     # Toplam kelime sayısı
     words = word_tokenize(text)
