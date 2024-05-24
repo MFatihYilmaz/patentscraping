@@ -1,17 +1,18 @@
 import asyncio
 import json
-
+import math
 import aiohttp
-from pyppeteer import launch
+from playwright.async_api import async_playwright
 from pdf import pdf_analyze
+from dataclasses import dataclass, field
+import concurrent.futures
 import re
 from service import service
+from typing import List
 import time
-import concurrent.futures
 from urllib.parse import quote
 
-from dataclasses import dataclass, field
-from typing import List
+from dataclasses import dataclass
 
 baslangic_zamani = time.time()
 
@@ -25,64 +26,87 @@ class Patent:
         self.publish_date = publish_date
 
 async def download_pdf(session, url, filename):
-    async with session.get(url) as response:
-        if response.status == 200:
-            content = await response.read()
-            await asyncio.to_thread(write_pdf, filename, content)
-            pdf_paths[filename] = url
+    try:
+        async with session.get(url) as response:
+            if response.status == 200:
+                content = await response.read()
+                await asyncio.to_thread(write_pdf, filename, content)
+                pdf_paths[filename] = url
+                print(f"Downloaded {filename}")
+            else:
+                print(f"Failed to download {filename}, status code: {response.status}")
+    except Exception as e:
+        print(f"Exception during download: {e}")
 
 def write_pdf(filename, content):
     with open(filename, 'wb') as f:
         f.write(content)
 
-
 async def visit_and_fetch(url):
     async with aiohttp.ClientSession() as session:
-        browser = await launch(handleSIGINT=False,
-                               handleSIGTERM=False,
-                               handleSIGHUP=False,
-                               headless=True
-                               )
-        print(url)
-        page = await browser.newPage()
-        await page.goto(url, {'waitUntil': 'domcontentloaded'})
-        await page.waitForSelector('td.MuiTableCell-root')
-        numofpatent = await page.querySelector('div#search-results p')
-        numofpatent = await (await numofpatent.getProperty('textContent')).jsonValue()
-        num = int(str(numofpatent).split(' ')[0])
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True)
+            print(url)
+            page = await browser.new_page()
+            await page.goto(url, wait_until='domcontentloaded')
+            await page.wait_for_timeout(10000)
+            not_found = await page.query_selector('div#search-results div h6')
+            if not_found is not None:
+                raise Exception("Pdf not found")
+            numofpatent_element = await page.query_selector('div#search-results p')
+            numofpatent = await numofpatent_element.text_content()
+            await page.click('#__next div section div span.jss92')
 
-        if numofpatent is None:
-            print('girdi')
-            return "String is empty"
-        num = 10 if num > 10 else num
-        tasks = []
+            await page.evaluate('''() => {
+                const element = document.querySelector('input.MuiSwitch-input');
+                element.click();
+                return element !== null && element.checked;
+            }''')
+            await page.wait_for_selector('input.MuiSwitch-input')
+            num = int(str(numofpatent).split(' ')[0].replace(".",""))
 
-        for i in range(num):
-            pdfId = await (
-                await (await page.querySelector(f'#applicationNumber-{i}')).getProperty('textContent')).jsonValue()
-            title = await (
-                await (await page.querySelector(f'th#enhanced-table-{i}')).getProperty('textContent')).jsonValue()
-            date = await (
-                await (await page.querySelector(f'td#applicationDate-{i}')).getProperty('textContent')).jsonValue()
-            patent = Patent(title, pdfId, date)
-            patents.append(patent)
-            download_url = f'https://portal.turkpatent.gov.tr/anonim/arastirma/patent/sonuc/dosya?patentAppNo={pdfId}&documentsTpye=all'
-            task = asyncio.create_task(download_pdf(session, download_url, f"pdf{i}.pdf"))
-            print(i)
-            tasks.append(task)
-        print(patents)
-        await asyncio.gather(*tasks)
+            if numofpatent is None:
+                print('girdi')
+                return "String is empty"
+            num = min(100, num)
+            tasks = []
+            pdfs_per_page = 20
+            click_length = math.ceil(num / pdfs_per_page) - 1
+            previous_height = await page.evaluate('document.body.scrollHeight')
+            for page_number in range(click_length):
+                print("girdi", page_number)
+
+                for i in range(pdfs_per_page):
+                    print("--------", (pdfs_per_page * page_number) + i)
+                    pdf_id_element = await page.query_selector(f'#applicationNumber-{(pdfs_per_page * page_number) + i}')
+                    pdf_id = await pdf_id_element.text_content()
+                    title_element = await page.query_selector(f'th#enhanced-table-{(pdfs_per_page * page_number) + i}')
+                    title = await title_element.text_content()
+                    date_element = await page.query_selector(f'td#applicationDate-{(pdfs_per_page * page_number) + i}')
+                    date = await date_element.text_content()
+                    patent = Patent(title, pdf_id, date)
+                    patents.append(patent)
+                    download_url = f'https://portal.turkpatent.gov.tr/anonim/arastirma/patent/sonuc/dosya?patentAppNo={pdf_id}&documentsTpye=all'
+                    task = asyncio.create_task(download_pdf(session, download_url, f"pdf{(pdfs_per_page * page_number) + i}.pdf"))
+                    tasks.append(task)
+
+                await page.evaluate('window.scrollTo(0, document.body.scrollHeight - 1200)')
+                await page.wait_for_selector(f'td#applicationNumber-{pdfs_per_page * (page_number + 1)}')
+                new_height = await page.evaluate('document.body.scrollHeight')
+                if new_height == previous_height:
+                    print('HATAAAAAAAAAAAAAAAAAAAAAA')
+                    break
+                previous_height = new_height
+
+            await asyncio.gather(*tasks)
+            await browser.close()
 
 async def main(url):
-    tasks = [visit_and_fetch(url)]
-    results = await asyncio.gather(*tasks)
-    if 'String is empty' in results:
-        return False
+    await visit_and_fetch(url)
 
-def mainfunc(q):
-    url = f'https://www.turkpatent.gov.tr/arastirma-yap?form=patent&params=%257B%2522title%2522%253A%2522{quote(q)}%2522%257D&run=true'
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main(url))
+def mainfunc(sum='',title='',date=''):
+    url = f'https://www.turkpatent.gov.tr/arastirma-yap?form=patent&params=%257B%2522abstracttr%2522%253A%2522{quote(sum)}%2522%257D%2C%257B%2522title%2522%253A%2522{quote(title)}%2522%257D&run=true'
+    asyncio.run(main(url))
     output,summ = pdf_analyze(pdf_paths)
     output = output.split("\n")
     output.pop(0)
