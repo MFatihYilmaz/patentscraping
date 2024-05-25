@@ -8,7 +8,7 @@ def service(text):
             {
                 "No": "Burada pdf'in kaçıncı pdf olduğu yazılacak",
                 "Link": "Burada pdf'in linki olacak",
-                "Trend": "Burada summary kısmında tespit edilen 5 anahtar kelime olacak",
+                "Keywords": "Burada summary kısmında tespit edilen 5 anahtar kelime olacak",
                 "Technologies": [
                     {
                         "TechnologyTitle": "Burada pdf'te bahsedilen teknolojinin başlığı olacak",
