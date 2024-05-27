@@ -2,6 +2,7 @@ import asyncio
 import json
 import math
 import aiohttp
+import os
 from playwright.async_api import async_playwright
 from pdf import pdf_analyze
 from dataclasses import dataclass, field
@@ -10,6 +11,7 @@ import re
 from service import service
 from typing import List
 import time
+import glob
 from urllib.parse import quote
 
 from dataclasses import dataclass
@@ -18,7 +20,6 @@ baslangic_zamani = time.time()
 
 patents = []
 pdf_paths = {}
-
 class Patent:
     def __init__(self, title, pdf_link, publish_date):
         self.title = title
@@ -35,8 +36,10 @@ async def download_pdf(session, url, filename):
                 print(f"Downloaded {filename}")
             else:
                 print(f"Failed to download {filename}, status code: {response.status}")
+
     except Exception as e:
-        print(f"Exception during download: {e}")
+        print(f"Exception during download:{filename,e}")
+        return e
 
 def write_pdf(filename, content):
     with open(filename, 'wb') as f:
@@ -73,7 +76,7 @@ async def visit_and_fetch(url):
             pdfs_per_page = 20
             click_length = math.ceil(num / pdfs_per_page) - 1
             previous_height = await page.evaluate('document.body.scrollHeight')
-            for page_number in range(click_length):
+            for page_number in range(click_length+1):
                 print("girdi", page_number)
 
                 for i in range(pdfs_per_page):
@@ -104,8 +107,19 @@ async def visit_and_fetch(url):
 async def main(url):
     await visit_and_fetch(url)
 
+def delete_files(pattern):
+    files = glob.glob(pattern)
+    for file in files:
+        try:
+            os.remove(file)
+            print(f"{file} silindi.")
+        except OSError as e:
+            print(f"{file} silinirken hata oluştu: {e}")
+
 def mainfunc(sum='',title='',date=''):
-    url = f'https://www.turkpatent.gov.tr/arastirma-yap?form=patent&params=%257B%2522abstracttr%2522%253A%2522{quote(sum)}%2522%257D%2C%257B%2522title%2522%253A%2522{quote(title)}%2522%257D&run=true'
+
+    delete_files("*.pdf")
+    url = f'https://www.turkpatent.gov.tr/arastirma-yap?form=patent&params=%257B%2522title%2522%253A%2522{quote(title)}%2522%257D&run=true'
     asyncio.run(main(url))
     output,summ = pdf_analyze(pdf_paths)
     output = output.split("\n")
@@ -129,9 +143,8 @@ def mainfunc(sum='',title='',date=''):
                 json_list.append(json_text)
                 print(f"Response for '{prompt}': {response}")
             except Exception as exc:
-                print(f"An error occurred for '{prompt}': {exc}")
+                print(f"An error occurred for '{prompt.splitlines()[0]}': {exc}")
         json_data = json.dumps(json_list,ensure_ascii=False,indent=4)
-
 
         with open("combined.json","w+",encoding="utf-8") as f:
             f.write(json_data)
@@ -144,4 +157,4 @@ def mainfunc(sum='',title='',date=''):
     return json_data
 
 if __name__=="__main__":
-    mainfunc('kahve')
+    mainfunc(title = 'rejenerasyon')
