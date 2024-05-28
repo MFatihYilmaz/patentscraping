@@ -67,12 +67,11 @@ async def visit_and_fetch(url):
             }''')
             await page.wait_for_selector('input.MuiSwitch-input')
             num = int(str(numofpatent).split(' ')[0].replace(".",""))
-            print("NUMARA: "+str(num))
+
             if numofpatent is None:
                 print('girdi')
                 return "String is empty"
             num = min(100, num)
-            print("NUMARA: ",num)
             tasks = []
             pdfs_per_page = 20
             click_length = math.ceil(num / pdfs_per_page) - 1
@@ -116,10 +115,8 @@ def delete_files(pattern):
             print(f"{file} silindi.")
         except OSError as e:
             print(f"{file} silinirken hata oluştu: {e}")
+def mainfunc(sum='',title='',start_date='',end_date=''):
 
-def mainfunc(sum='',title='',date=''):
-
-    delete_files("*.pdf")
     url = f'https://www.turkpatent.gov.tr/arastirma-yap?form=patent&params=%257B%2522title%2522%253A%2522{quote(title)}%2522%257D&run=true'
     asyncio.run(main(url))
     output,summ = pdf_analyze(pdf_paths)
@@ -139,6 +136,7 @@ def mainfunc(sum='',title='',date=''):
                 json_text = json.loads(response)
                 sum_index=output.index(prompt)
                 json_text["Summary"]=summ[sum_index]
+                #json_text["Date"]=date
                 print(json_text)
 
                 json_list.append(json_text)
@@ -154,8 +152,8 @@ def mainfunc(sum='',title='',date=''):
     bitis_zamani = time.time()
     gecen_sure = bitis_zamani - baslangic_zamani
     print(gecen_sure)
-
+    delete_files("*.pdf")
     return json_data
 
 if __name__=="__main__":
-    mainfunc(title = 'kahve')
+    mainfunc(title = 'kablosuz şarj')
