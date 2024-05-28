@@ -116,10 +116,10 @@ def delete_files(pattern):
         except OSError as e:
             print(f"{file} silinirken hata oluştu: {e}")
 
-def mainfunc(sum='',title='',date=''):
+def mainfunc(sum='',title='',start_date='',end_date=''):
 
     delete_files("*.pdf")
-    url = f'https://www.turkpatent.gov.tr/arastirma-yap?form=patent&params=%257B%2522title%2522%253A%2522{quote(title)}%2522%257D&run=true'
+    url = f'https://www.turkpatent.gov.tr/arastirma-yap?form=patent&params=%257b%2522abstracttr%2522%253a%2522{quote(sum)}%2522%252c%2522title%2522%253a%2522{quote(title)}%2522%252c%2522bulletinDate%2522%253a%2522{quote(start_date)}%2522%252c%2522bulletinDateLast%2522%253a%2522{quote(end_date)}%2522%257d&run=true'
     asyncio.run(main(url))
     output,summ = pdf_analyze(pdf_paths)
     output = output.split("\n")
