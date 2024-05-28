@@ -46,79 +46,47 @@ def get_text_from_pdf(pdf_path):
     text = ""
     for page in pdf_doc:
         page_text = page.get_text("text")
+        if len(page_text) == 0:
+            print("GİRDİK")
+            return None
         text += page_text + "\n"
     text = re.sub(r"^([^\n]*)\n\s*([0-9]+)\s*\n", r"\1\n", text, flags=re.MULTILINE)
     return text
 
-
 def find_claim(text):
-    claim_start = text.find("İSTEMLER")
+    claim_start = text.find("STEMLER")
     claim_end = text.find("TARİFNAME")
-    return claim_start, claim_end
-
-
+    if claim_end>claim_start and claim_start > 0 and claim_end > 0:
+        return claim_start, claim_end
+    return 0,0
 def find_summary(text):
     summary_start = text.find("ÖZET")
-    summary_end = text.find("İSTEMLER")
-    return summary_start, summary_end
-
-
-pdf_paths = ["pdf0.pdf", "pdf2.pdf", "pdf3.pdf", "pdf4.pdf", "pdf5.pdf", "pdf6.pdf", "pdf7.pdf", "pdf8.pdf", "pdf9.pdf"]
-
-
+    summary_end = text.find("STEMLER")
+    if summary_end > summary_start and summary_start > 0 and summary_end > 0:
+        return summary_start, summary_end
+    return 0,0
 def pdf_analyze(pdf_paths):
     output = ""
     summary_text = []
     i = 1
     for pdf_path, pdf_url in pdf_paths.items():
-        output_filename = os.path.splitext(pdf_path)[0] + ".txt"
 
         text = get_text_from_pdf(pdf_path)
-        if text is None:
-            continue
 
-        summary_start, summary_end = find_summary(text)
-        if summary_start is None:
-            continue
+        if text is not None:
 
-        claim_start, claim_end = find_claim(text)
+            summary_start, summary_end = find_summary(text)
 
-        # print(f"**Özet:**")
-        # print(text[summary_start+4:summary_end])
+            claim_start, claim_end = find_claim(text)
 
-        # print(f"**İstemler:**")
-        # output += "\n"+pdf_path+" link: "+pdf_url
+            print("ÇIKTI "+str(summary_start)+" "+str(summary_end)+" "+str(claim_start)+" "+str(claim_end))
+            if summary_end>summary_start and claim_end>claim_start and summary_start != 0 and claim_start != 0:
+                print(f"girdi: {pdf_url}")
+                output += f"\n{str(i)}. pdf-link: {pdf_url}"
+                output += (text[claim_start + 8:claim_end]).replace("\n", " ")
 
-        output += f"\n{str(i)}. pdf-link: {pdf_url}"
-        output += (text[claim_start + 8:claim_end]).replace("\n", " ")
+                summary_text.append(text[summary_start:summary_end])
+                i += 1
 
-        cleaned_text = re.sub(r'[^a-zA-ZğüşıöçĞÜŞİÖÇ0-9.,\'/=+&(){}:;?!\s]', '', output)
-        # print(pdf_path+" link: "+pdf_url)
-        # print(text[claim_start+8:claim_end])
-        # Özet ve istemleri kullanarak metin analizini yap
-        summary_text.append(text[summary_start:summary_end])
-        claim_text = text[claim_start:claim_end]
-
-        # claim_text içindeki tüm noktalama işaretlerini silme
-        claim_text = re.sub(r'[^\w\s]', '', claim_text)
-
-        claim_analysis = analyze_text(claim_text)
-        i += 1
-    '''    # Analiz sonuçlarını görüntüle
-        print("**Özet Analizi:**")
-        print("Toplam Kelime Sayısı:", summary_analysis["total_words"])
-        print("En Sık Geçen Kelimeler:", summary_analysis["most_common_words"])
-        print("Toplam Cümle Sayısı:", summary_analysis["total_sentences"])
-        print("Anahtar Kelimeler:", summary_analysis["keywords"])
-        print("Bağlaç (ve) Sayısı:", summary_analysis["conjunction_count"])
-        print("\n")
-
-        print("**İstemler Analizi:**")
-        print("Toplam Kelime Sayısı:", claim_analysis["total_words"])
-        print("En Sık Geçen Kelimeler:", claim_analysis["most_common_words"])
-        print("Toplam Cümle Sayısı:", claim_analysis["total_sentences"])
-        print("Anahtar Kelimeler:", claim_analysis["keywords"])
-        print("Bağlaç (ve) Sayısı:", claim_analysis["conjunction_count"])
-    '''
-
+    cleaned_text = re.sub(r'[^a-zA-ZğüşıöçĞÜŞİÖÇ0-9.,\'/=+&(){}:;?!\s]', '', output)
     return cleaned_text,summary_text

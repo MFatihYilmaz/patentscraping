@@ -67,16 +67,17 @@ async def visit_and_fetch(url):
             }''')
             await page.wait_for_selector('input.MuiSwitch-input')
             num = int(str(numofpatent).split(' ')[0].replace(".",""))
-
+            print("NUMARA: "+str(num))
             if numofpatent is None:
                 print('girdi')
                 return "String is empty"
             num = min(100, num)
+            print("NUMARA: ",num)
             tasks = []
             pdfs_per_page = 20
             click_length = math.ceil(num / pdfs_per_page) - 1
             previous_height = await page.evaluate('document.body.scrollHeight')
-            for page_number in range(click_length+1):
+            for page_number in range(click_length):
                 print("girdi", page_number)
 
                 for i in range(pdfs_per_page):
@@ -116,10 +117,10 @@ def delete_files(pattern):
         except OSError as e:
             print(f"{file} silinirken hata oluştu: {e}")
 
-def mainfunc(sum='',title='',start_date='',end_date=''):
+def mainfunc(sum='',title='',date=''):
 
     delete_files("*.pdf")
-    url = f'https://www.turkpatent.gov.tr/arastirma-yap?form=patent&params=%257b%2522abstracttr%2522%253a%2522{quote(sum)}%2522%252c%2522title%2522%253a%2522{quote(title)}%2522%252c%2522bulletinDate%2522%253a%2522{quote(start_date)}%2522%252c%2522bulletinDateLast%2522%253a%2522{quote(end_date)}%2522%257d&run=true'
+    url = f'https://www.turkpatent.gov.tr/arastirma-yap?form=patent&params=%257B%2522title%2522%253A%2522{quote(title)}%2522%257D&run=true'
     asyncio.run(main(url))
     output,summ = pdf_analyze(pdf_paths)
     output = output.split("\n")
@@ -157,4 +158,4 @@ def mainfunc(sum='',title='',start_date='',end_date=''):
     return json_data
 
 if __name__=="__main__":
-    mainfunc(title = 'rejenerasyon')
+    mainfunc(title = 'kahve')
