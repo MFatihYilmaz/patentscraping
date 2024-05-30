@@ -12,10 +12,14 @@ async def get_relationel_patent():
     query = request.args.get('q')
     summary_words=request.args.get('words')
 
-    date = request.args.get('date')
+    startDate = request.args.get('startDate')
+    endDate = request.args.get('endDate')
     # Bu fonksiyon 3 parametre aliyor default deger bos string
     #Sadece baslik varsa mainfunc(title=query) seklinde digerlerinide ayni sekil yollayabilirsiniz 
-    response = mainfunc(title=query)
+    if startDate !=None and endDate != None:
+        response = mainfunc(title=query,sum=summary_words,start_date=startDate,end_date=endDate)
+    else:
+        response = mainfunc(title=query)
 
     return response
 if __name__ == '__main__':
