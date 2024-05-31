@@ -35,8 +35,8 @@ def analyze_text(text):
         "conjunction_count": conjunction_count
     }
 
-
 def get_text_from_pdf(pdf_path):
+    print(pdf_path)
     try:
         pdf_doc = fitz.open(pdf_path)
     except Exception as e:
@@ -44,10 +44,13 @@ def get_text_from_pdf(pdf_path):
         return None
 
     text = ""
-    for page in pdf_doc:
+    for index,page in enumerate(pdf_doc):
+        print(page)
         page_text = page.get_text("text")
-        if len(page_text) == 0:
-            print("GİRDİK")
+        print(page_text)
+        print("len:",len(page_text))
+        if len(page_text) == 0 and index == 0:
+            print("GİRDİK:",page_text)
             return None
         text += page_text + "\n"
     text = re.sub(r"^([^\n]*)\n\s*([0-9]+)\s*\n", r"\1\n", text, flags=re.MULTILINE)
@@ -68,6 +71,7 @@ def find_summary(text):
 def pdf_analyze(pdf_paths):
     output = ""
     summary_text = []
+    print("path: ",pdf_paths)
     i = 1
     for pdf_path, pdf_url in pdf_paths.items():
 
