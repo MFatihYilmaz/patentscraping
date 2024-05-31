@@ -19,20 +19,22 @@ baslangic_zamani = time.time()
 patents = {}
 pdf_paths = {}
 
+
 class Patent:
-    def __init__(self, index,title, pdf_link, publish_date):
-        self.index=index
+    def __init__(self, index, title, pdf_link, publish_date):
+        self.index = index
         self.title = title
         self.pdf_link = pdf_link
         self.publish_date = publish_date
 
     def to_dict(self):
         return {
-            'index':self.index,
+            'index': self.index,
             'title': self.title,
             'pdf_link': self.pdf_link,
             'publish_date': self.publish_date
         }
+
 
 async def download_pdf(session, url, filename):
     try:
@@ -46,12 +48,14 @@ async def download_pdf(session, url, filename):
                 print(f"Failed to download {filename}, status code: {response.status}")
 
     except Exception as e:
-        print(f"Exception during download:{filename,e}")
+        print(f"Exception during download:{filename, e}")
         return e
+
 
 def write_pdf(filename, content):
     with open(filename, 'wb') as f:
         f.write(content)
+
 
 async def visit_and_fetch(url):
     async with aiohttp.ClientSession() as session:
@@ -74,31 +78,32 @@ async def visit_and_fetch(url):
                 return element !== null && element.checked;
             }''')
             await page.wait_for_selector('input.MuiSwitch-input')
-            num = int(str(numofpatent).split(' ')[0].replace(".",""))
-
+            num = int(str(numofpatent).split(' ')[0].replace(".", ""))
 
             num = min(100, num)
             tasks = []
             pdfs_per_page = 20
-            click_length = max(math.ceil(num / pdfs_per_page) - 1,1)
+            click_length = max(math.ceil(num / pdfs_per_page) - 1, 1)
             previous_height = await page.evaluate('document.body.scrollHeight')
             for page_number in range(click_length):
                 print("girdi", page_number)
-                for i in range(min(pdfs_per_page,num)):
+                for i in range(min(pdfs_per_page, num)):
                     print("--------", (pdfs_per_page * page_number))
-                    pdf_id_element = await page.query_selector(f'#applicationNumber-{(pdfs_per_page * page_number) + i}')
-                    print("id element: ",pdf_id_element)
+                    pdf_id_element = await page.query_selector(
+                        f'#applicationNumber-{(pdfs_per_page * page_number) + i}')
+                    print("id element: ", pdf_id_element)
                     pdf_id = await pdf_id_element.text_content()
 
                     title_element = await page.query_selector(f'th#enhanced-table-{(pdfs_per_page * page_number) + i}')
                     title = await title_element.text_content()
                     date_element = await page.query_selector(f'td#applicationDate-{(pdfs_per_page * page_number) + i}')
                     date = await date_element.text_content()
-                    
+
                     download_url = f'https://portal.turkpatent.gov.tr/anonim/arastirma/patent/sonuc/dosya?patentAppNo={pdf_id}&documentsTpye=all'
-                    patent = Patent(((pdfs_per_page * page_number) + i),title, download_url, date)
-                    patents[download_url]=patent
-                    task = asyncio.create_task(download_pdf(session, download_url, f"pdf{(pdfs_per_page * page_number) + i}.pdf"))
+                    patent = Patent(((pdfs_per_page * page_number) + i), title, download_url, date)
+                    patents[download_url] = patent
+                    task = asyncio.create_task(
+                        download_pdf(session, download_url, f"pdf{(pdfs_per_page * page_number) + i}.pdf"))
                     tasks.append(task)
                 print("FOR BİTTİ")
                 if num > 20:
@@ -113,8 +118,10 @@ async def visit_and_fetch(url):
             await asyncio.gather(*tasks)
             await browser.close()
 
+
 async def main(url):
     await visit_and_fetch(url)
+
 
 def delete_files(pattern):
     files = glob.glob(pattern)
@@ -125,17 +132,42 @@ def delete_files(pattern):
         except OSError as e:
             print(f"{file} silinirken hata oluştu: {e}")
 
+def drop_upper_words(string):
+    words = string.split()
+    result = []
+
+    for word in words:
+        if not word.isupper():
+            result = words[words.index(word):]
+            break
+
+    return ' '.join(result)
+def remove_first_word_if_not_capitalized(string):
+    words = string.split()
+    result = []
+
+    for word in words:
+        if word[0].isupper():
+            result = words[words.index(word):]
+            break
+
+    return ' '.join(result)
+
+def remove_spaces(string):
+    for letter in string:
+        if string.startswith(" "):
+            string = string[1:]
+    return string
+
 def mainfunc(sum='', title='', start_date='', end_date=''):
     delete_files("*.pdf")
     url = f'https://www.turkpatent.gov.tr/arastirma-yap?form=patent&params=%257b%2522abstracttr%2522%253a%2522{quote(sum)}%2522%252c%2522title%2522%253a%2522{quote(title)}%2522%252c%2522bulletinDate%2522%253a%2522{quote(start_date)}%2522%252c%2522bulletinDateLast%2522%253a%2522{quote(end_date)}%2522%257d&run=true'
     asyncio.run(main(url))
-    time.sleep(1)
     output, summ = pdf_analyze(pdf_paths)
     output = output.split("\n")
     output.pop(0)
 
     num_threads = len(output)
-
 
     print("num threads: ", num_threads)
     json_list = []
@@ -147,11 +179,15 @@ def mainfunc(sum='', title='', start_date='', end_date=''):
                 response = future.result()
                 json_text = json.loads(response)
                 sum_index = output.index(prompt)
-                json_text["Summary"] = summ[sum_index]
                 patent_index = json_text.get('Link')
                 patentval = patents.get(patent_index)
+                allsum = summ[sum_index].replace("\n","").replace("ÖZET","")
+                sumtitle = patentval.to_dict()["title"].replace("\n","").replace("  "," ")
+                allsum = remove_spaces(allsum)
+                allsum = drop_upper_words(allsum)
+                allsum = remove_first_word_if_not_capitalized(allsum)
+                json_text["Summary"] = allsum.replace(sumtitle,"")
                 json_text['patent_data'] = patentval.to_dict()
-                print(patentval.to_dict()["title"])
                 json_list.append(json_text)
                 print(f"Response for '{prompt}': {response}")
             except Exception as exc:
@@ -169,4 +205,4 @@ def mainfunc(sum='', title='', start_date='', end_date=''):
 
 
 if __name__ == "__main__":
-    mainfunc(title='rejenerasyon')
+    mainfunc(title='kahve')
