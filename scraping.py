@@ -76,21 +76,20 @@ async def visit_and_fetch(url):
             await page.wait_for_selector('input.MuiSwitch-input')
             num = int(str(numofpatent).split(' ')[0].replace(".",""))
 
-            if numofpatent is None:
-                print('girdi')
-                return "String is empty"
-            num = 30#min(100, num)
+
+            num = min(100, num)
             tasks = []
             pdfs_per_page = 20
-            click_length = math.ceil(num / pdfs_per_page) - 1
+            click_length = max(math.ceil(num / pdfs_per_page) - 1,1)
             previous_height = await page.evaluate('document.body.scrollHeight')
             for page_number in range(click_length):
                 print("girdi", page_number)
-
-                for i in range(pdfs_per_page):
+                for i in range(min(pdfs_per_page,num)):
                     print("--------", (pdfs_per_page * page_number))
                     pdf_id_element = await page.query_selector(f'#applicationNumber-{(pdfs_per_page * page_number) + i}')
+                    print("id element: ",pdf_id_element)
                     pdf_id = await pdf_id_element.text_content()
+
                     title_element = await page.query_selector(f'th#enhanced-table-{(pdfs_per_page * page_number) + i}')
                     title = await title_element.text_content()
                     date_element = await page.query_selector(f'td#applicationDate-{(pdfs_per_page * page_number) + i}')
@@ -101,14 +100,15 @@ async def visit_and_fetch(url):
                     patents[download_url]=patent
                     task = asyncio.create_task(download_pdf(session, download_url, f"pdf{(pdfs_per_page * page_number) + i}.pdf"))
                     tasks.append(task)
-
-                await page.evaluate('window.scrollTo(0, document.body.scrollHeight - 1200)')
-                await page.wait_for_selector(f'td#applicationNumber-{pdfs_per_page * (page_number + 1)}')
-                new_height = await page.evaluate('document.body.scrollHeight')
-                if new_height == previous_height:
-                    print('HATAAAAAAAAAAAAAAAAAAAAAA')
-                    break
-                previous_height = new_height
+                print("FOR BİTTİ")
+                if num > 20:
+                    await page.evaluate('window.scrollTo(0, document.body.scrollHeight - 1200)')
+                    await page.wait_for_selector(f'td#applicationNumber-{(pdfs_per_page * (page_number + 1))}')
+                    new_height = await page.evaluate('document.body.scrollHeight')
+                    if new_height == previous_height:
+                        print('HATAAAAAAAAAAAAAAAAAAAAAA')
+                        break
+                    previous_height = new_height
 
             await asyncio.gather(*tasks)
             await browser.close()
@@ -129,11 +129,15 @@ def mainfunc(sum='', title='', start_date='', end_date=''):
     delete_files("*.pdf")
     url = f'https://www.turkpatent.gov.tr/arastirma-yap?form=patent&params=%257b%2522abstracttr%2522%253a%2522{quote(sum)}%2522%252c%2522title%2522%253a%2522{quote(title)}%2522%252c%2522bulletinDate%2522%253a%2522{quote(start_date)}%2522%252c%2522bulletinDateLast%2522%253a%2522{quote(end_date)}%2522%257d&run=true'
     asyncio.run(main(url))
+    time.sleep(1)
     output, summ = pdf_analyze(pdf_paths)
     output = output.split("\n")
     output.pop(0)
 
     num_threads = len(output)
+
+
+    print("num threads: ", num_threads)
     json_list = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
         future_to_prompt = {executor.submit(service, prompt): prompt for prompt in output}
@@ -144,10 +148,10 @@ def mainfunc(sum='', title='', start_date='', end_date=''):
                 json_text = json.loads(response)
                 sum_index = output.index(prompt)
                 json_text["Summary"] = summ[sum_index]
-                patent_index=json_text.get('Link')
-                patentval=patents.get(patent_index)
-                json_text['patent_data']=patentval.to_dict()
-                
+                patent_index = json_text.get('Link')
+                patentval = patents.get(patent_index)
+                json_text['patent_data'] = patentval.to_dict()
+                print(patentval.to_dict()["title"])
                 json_list.append(json_text)
                 print(f"Response for '{prompt}': {response}")
             except Exception as exc:
@@ -162,6 +166,7 @@ def mainfunc(sum='', title='', start_date='', end_date=''):
     print(gecen_sure)
 
     return json_data
+
 
 if __name__ == "__main__":
     mainfunc(title='rejenerasyon')
