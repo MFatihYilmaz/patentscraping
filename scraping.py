@@ -84,7 +84,7 @@ async def visit_and_fetch(url):
             pdfs_per_page = 20
             click_length = math.ceil(num / pdfs_per_page) - 1
             previous_height = await page.evaluate('document.body.scrollHeight')
-            for page_number in range(click_length+1):
+            for page_number in range(click_length):
                 print("girdi", page_number)
 
                 for i in range(pdfs_per_page):
