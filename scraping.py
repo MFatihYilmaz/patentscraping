@@ -19,7 +19,6 @@ baslangic_zamani = time.time()
 patents = {}
 pdf_paths = {}
 
-
 class Patent:
     def __init__(self, index, title, pdf_link, publish_date):
         self.index = index
@@ -132,32 +131,31 @@ def delete_files(pattern):
         except OSError as e:
             print(f"{file} silinirken hata oluştu: {e}")
 
-def drop_upper_words(string):
-    words = string.split()
-    result = []
-
-    for word in words:
-        if not word.isupper():
-            result = words[words.index(word):]
-            break
-
-    return ' '.join(result)
-def remove_first_word_if_not_capitalized(string):
-    words = string.split()
-    result = []
-
-    for word in words:
-        if word[0].isupper():
-            result = words[words.index(word):]
-            break
-
-    return ' '.join(result)
-
 def remove_spaces(string):
     for letter in string:
         if string.startswith(" "):
             string = string[1:]
     return string
+
+def remove_unwanted_letters(string):
+    if string.endswith("İ"):
+        string = string[:-1]
+    return string
+
+def find_first_word(string):
+    # String'i kelimelere böl
+    words = string.split()
+    while words and words[-1].isdigit():
+        # Son kelimeyi kaldır
+        words.pop()
+    # İstenen formattaki kelimeyi bulana kadar ilerle
+    for i, word in enumerate(words):
+        if word[0].isupper() and word[1:].islower():
+            # İstenen formattaki kelimeyi bulunca kelimeye kadar olan kısmı döndür
+            return ' '.join(words[i:])
+
+    # Eğer istenen formattaki kelime bulunamazsa boş string döndür
+    return ''
 
 def mainfunc(sum='', title='', start_date='', end_date=''):
     delete_files("*.pdf")
@@ -184,8 +182,8 @@ def mainfunc(sum='', title='', start_date='', end_date=''):
                 allsum = summ[sum_index].replace("\n","").replace("ÖZET","")
                 sumtitle = patentval.to_dict()["title"].replace("\n","").replace("  "," ")
                 allsum = remove_spaces(allsum)
-                allsum = drop_upper_words(allsum)
-                allsum = remove_first_word_if_not_capitalized(allsum)
+                allsum = remove_unwanted_letters(allsum)
+                allsum = find_first_word(allsum)
                 json_text["Summary"] = allsum.replace(sumtitle,"")
                 json_text['patent_data'] = patentval.to_dict()
                 json_list.append(json_text)
@@ -202,7 +200,6 @@ def mainfunc(sum='', title='', start_date='', end_date=''):
     print(gecen_sure)
 
     return json_data
-
 
 if __name__ == "__main__":
     mainfunc(title='kahve')
