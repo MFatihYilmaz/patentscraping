@@ -49,7 +49,6 @@ def get_text_from_pdf(pdf_path):
         page_text = page.get_text("text")
 
         if len(page_text) == 0 and index == 0:
-            print("GİRDİK:",page_text)
             return None
         text += page_text + "\n"
     text = re.sub(r"^([^\n]*)\n\s*([0-9]+)\s*\n", r"\1\n", text, flags=re.MULTILINE)
@@ -82,9 +81,7 @@ def pdf_analyze(pdf_paths):
 
             claim_start, claim_end = find_claim(text)
 
-            print("ÇIKTI "+str(summary_start)+" "+str(summary_end)+" "+str(claim_start)+" "+str(claim_end))
             if summary_end>summary_start and claim_end>claim_start and summary_start != 0 and claim_start != 0:
-                print(f"girdi: {pdf_url}")
                 output += f"\n{str(i)}. pdf-link: {pdf_url}"
                 output += (text[claim_start + 8:claim_end]).replace("\n", " ")
 

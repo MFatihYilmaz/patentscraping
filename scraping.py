@@ -85,12 +85,10 @@ async def visit_and_fetch(url):
             click_length = max(math.ceil(num / pdfs_per_page) - 1, 1)
             previous_height = await page.evaluate('document.body.scrollHeight')
             for page_number in range(click_length):
-                print("girdi", page_number)
                 for i in range(min(pdfs_per_page, num)):
                     print("--------", (pdfs_per_page * page_number))
                     pdf_id_element = await page.query_selector(
                         f'#applicationNumber-{(pdfs_per_page * page_number) + i}')
-                    print("id element: ", pdf_id_element)
                     pdf_id = await pdf_id_element.text_content()
 
                     title_element = await page.query_selector(f'th#enhanced-table-{(pdfs_per_page * page_number) + i}')
@@ -104,13 +102,11 @@ async def visit_and_fetch(url):
                     task = asyncio.create_task(
                         download_pdf(session, download_url, f"pdf{(pdfs_per_page * page_number) + i}.pdf"))
                     tasks.append(task)
-                print("FOR BİTTİ")
                 if num > 20:
                     await page.evaluate('window.scrollTo(0, document.body.scrollHeight - 1200)')
                     await page.wait_for_selector(f'td#applicationNumber-{(pdfs_per_page * (page_number + 1))}')
                     new_height = await page.evaluate('document.body.scrollHeight')
                     if new_height == previous_height:
-                        print('HATAAAAAAAAAAAAAAAAAAAAAA')
                         break
                     previous_height = new_height
 
@@ -167,7 +163,6 @@ def mainfunc(sum='', title='', start_date='', end_date=''):
 
     num_threads = len(output)
 
-    print("num threads: ", num_threads)
     json_list = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
         future_to_prompt = {executor.submit(service, prompt): prompt for prompt in output}
@@ -187,7 +182,6 @@ def mainfunc(sum='', title='', start_date='', end_date=''):
                 json_text["Summary"] = allsum.replace(sumtitle,"")
                 json_text['patent_data'] = patentval.to_dict()
                 json_list.append(json_text)
-                print(f"Response for '{prompt}': {response}")
             except Exception as exc:
                 print(f"An error occurred for '{prompt.splitlines()[0]}': {exc}")
         json_data = json.dumps(json_list, ensure_ascii=False, indent=4)
