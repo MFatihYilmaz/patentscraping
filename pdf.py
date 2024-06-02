@@ -45,10 +45,9 @@ def get_text_from_pdf(pdf_path):
 
     text = ""
     for index,page in enumerate(pdf_doc):
-        print(page)
+
         page_text = page.get_text("text")
-        print(page_text)
-        print("len:",len(page_text))
+
         if len(page_text) == 0 and index == 0:
             print("GİRDİK:",page_text)
             return None
