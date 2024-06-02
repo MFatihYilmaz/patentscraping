@@ -92,7 +92,7 @@ $(document).ready(function () {
         }
 
         var cardLink = $('<a class="card-link" href="' + patent.Link + '" target="_blank">').text("Patente Git");
-        var cardDetailLink = $('<a class="card-link" href="/detay/' + patent.No + '">').text("Detay");
+        var cardDetailLink = $('<a class="card-link detay-link" href="/detay/' + patent.No + '">').text("Detay");
 
         cardBody.prepend(cardTitle); // Adds card title
         cardBody.append(cardLink, cardDetailLink); // Adds links
@@ -266,4 +266,7 @@ $(document).ready(function () {
 
     // Set a flag in sessionStorage to indicate that the page has been loaded
     sessionStorage.setItem('pageLoaded', 'true');
+     $(document).on('click', '.detay-link', function () {
+        showLoader();
+    });
 });
