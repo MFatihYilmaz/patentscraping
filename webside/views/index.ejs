@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Scraping App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="https://kit.fontawesome.com/16fdacb02d.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+
+</head>
+
+<body>
+    <!-- Navbar -->
+    <%- include("partials/navbar"); -%>
+
+        <div class="container mt-5">
+            <!-- Tab Menüsü -->
+            <ul class="nav nav-tabs mb-3" id="searchTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" style="color: #b388ff;" id=" simpleSearchTab" data-bs-toggle="tab"
+                        data-bs-target="#simpleSearchForm" type="button" role="tab" aria-controls="simpleSearchForm"
+                        aria-selected="true">Basit Arama</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" style="color: #b388ff;" id="advancedSearchTab" data-bs-toggle="tab"
+                        data-bs-target="#advancedSearchForm" type="button" role="tab" aria-controls="advancedSearchForm"
+                        aria-selected="false">Gelişmiş Arama</button>
+                </li>
+            </ul>
+            <!-- Tab İçeriği -->
+            <div class="tab-content col-6">
+                <!-- Basit Arama Formu -->
+                <div class="tab-pane fade show active" id="simpleSearchForm" role="tabpanel"
+                    aria-labelledby="simpleSearchTab">
+                    <div class="card card-body">
+                        <form id="simpleSearchForm" method="post" action="/search">
+                            <div class="form-group mb-3">
+                                <label for="simpleSearchInput">Buluş Başlığı</label>
+                                <input type="text" id="simpleSearchInput" name="searchText" class="form-control"
+                                    placeholder="Buluş başlığı">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Ara</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Gelişmiş Arama Formu -->
+                <div class="tab-pane fade" id="advancedSearchForm" role="tabpanel" aria-labelledby="advancedSearchTab">
+                    <div class="card card-body">
+                        <form id="advancedSearchForm" method="post" action="/advanced-search">
+                            <div class="form-group mb-3">
+                                <label for="advancedSearchTitleInput">Buluş Başlığı</label>
+                                <input type="text" id="advancedSearchTitleInput" name="searchText" class="form-control"
+                                    placeholder="Buluş başlığı">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="advancedSummaryInput">Buluş Özeti</label>
+                                <input type="text" id="advancedSummaryInput" name="summaryText" class="form-control"
+                                    placeholder="Buluş özeti girin">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="advancedStartDateInput">Başlangıç Tarihi</label>
+                                <input type="date" id="advancedStartDateInput" name="startDate" class="form-control">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="advancedEndDateInput">Bitiş Tarihi</label>
+                                <input type="date" id="advancedEndDateInput" name="endDate" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Ara</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chart Container -->
+
+            <div class="card mt-4 d-none" id="keywordChartContainer">
+                <div class="card-title">
+                    <h5 class="pt-3 ps-3">Yıllara Göre Anahtar Kelimeler</h5>
+                </div>
+                <div class="card-body "><canvas id="keywordChart"></canvas>
+                </div>
+            </div>
+            <div class="row mt-4 card-columns">
+                <% patents.forEach(patent=> { %>
+                    <div class="col-12">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <%= patent.Title %>
+                                </h5>
+                                <p class="card-text">
+                                    <%= patent.PdfSummary %>
+                                </p>
+                                <% if (patent.Technologies && patent.Technologies.length> 0) { %>
+                                    <div class="technologies">
+                                        <h4 class="white-text">Teknolojiler:</h4>
+                                        <ul>
+                                            <% patent.Technologies.forEach(tech=> { %>
+                                                <li class="white-text">
+                                                    <%= tech.TechnologyTitle %>: <%= tech.TechnologyDescription %>
+                                                </li>
+                                                <% }) %>
+                                        </ul>
+                                    </div>
+                                    <% } %>
+                                        <% if (patent.Techniques && patent.Techniques.length> 0) { %>
+                                            <div class="techniques">
+                                                <h4 class="white-text">Teknikler:</h4>
+                                                <ul>
+                                                    <% patent.Techniques.forEach(tech=> { %>
+                                                        <li class="white-text">
+                                                            <%= tech.TechniquesTitle %>: <%= tech.TechniquesDescription
+                                                                    %>
+                                                        </li>
+                                                        <% }) %>
+                                                </ul>
+                                            </div>
+                                            <% } %>
+                                                <div class="links">
+                                                    <a class="card-link" href="<%= patent.Link %>"
+                                                        target="_blank">Patente Git</a>
+                                                    <a class="card-link" href="/detay/<%= patent.No %>">Detay</a>
+                                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+        </div>
+
+        <!-- Loader HTML -->
+        <div id="loader" class="loader"></div>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+        <script src="/js/script.js"></script>
+</body>
+
+</html>

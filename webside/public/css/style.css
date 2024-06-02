@@ -1,0 +1,326 @@
+.custom-container {
+    display: inline-flex;
+    justify-content: center;
+    /* Yatayda ortala */
+    width: 50%;
+}
+
+/* Dark tema için ana stil */
+body {
+    background-color: #121212;
+    /* Arka plan rengi */
+    color: #b388ff;
+    /* Yazı rengi */
+}
+
+/* Navbar için stil */
+.navbar {
+    background-color: #1f1f1f;
+    /* Navbar arka plan rengi */
+}
+
+
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.navbar .navbar-brand,
+.navbar .navbar-nav .nav-link {
+    /* Navbar metin rengi */
+
+    color: #b388ff;
+    margin-left: 10px;
+}
+
+.navbar-collapse {
+    text-align: center;
+    color: white;
+}
+
+.navbar-collapse {
+    margin-right: 50px;
+}
+
+/* Butonlar için stil */
+.btn {
+    background-color: #b388ff;
+    /* Buton arka plan rengi */
+    color: #121212;
+    /* Buton metin rengi */
+}
+
+/* Kartlar için stil */
+.card {
+    background-color: #1f1f1f;
+    /* Kart arka plan rengi */
+    color: #b388ff;
+    /* Kart metin rengi */
+}
+
+#keywordChart {
+    min-height: 600px;
+}
+
+/* Hakkında sayfası için özel stil */
+.card-title {
+    /* İstediğiniz özel stilleri buraya ekleyin */
+    color: #f5c517;
+}
+
+/* ... Diğer bileşenler için özel stiller ... */
+p {
+    color: white;
+}
+
+.card-columns {
+    column-count: 2;
+    /* İstediğiniz sütun sayısını buradan ayarlayabilirsiniz */
+}
+
+
+.visible {
+    display: block;
+}
+
+
+
+/* Loader for the center of the screen */
+.loader {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+
+.visible {
+    display: block;
+}
+
+/* Loader animation */
+.loader::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 6px solid #b388ff;
+    border-color: #b388ff transparent #b388ff transparent;
+    animation: loader 1.2s linear infinite;
+}
+
+@keyframes loader {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+
+/* Buton ve text field arasındaki mesafe */
+#scrapeBtn {
+    margin-left: 10px;
+    height: 40px;
+    border-color: #b388ff;
+    border-radius: 5px;
+
+
+    /* Kenarlık rengi mor */
+}
+
+/* Verileri Getir butonu için stil */
+
+.card-subtitle {
+    color: white;
+}
+
+.card h4 {
+    /* Teknoloji ve teknik başlıklarının varsayılan renkleri */
+    color: #b388ff;
+    /* Varsayılan renk için koyu bir renk seçilebilir */
+}
+
+.white-text {
+    color: white;
+}
+
+.card-link {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    border: 1px solid white;
+    /* Border çizgisi */
+    border-radius: 5px;
+    /* Kenarları kavisli yapma */
+    background-color: transparent;
+    color: white;
+    /* Yazı rengi */
+    text-decoration: none;
+    /* Alt çizgiyi kaldırma */
+    transition: background-color 0.3s, color 0.3s;
+    /* Geçiş efektleri */
+}
+
+.card-link:hover {
+    background-color: purple;
+    /* Üzerine gelince arka plan rengi */
+    color: white;
+    /* Yazı rengi */
+}
+
+#scrapeBtn:hover {
+    background-color: #fff;
+    /* Butonun üzerine gelindiğinde arka plan rengi değişmez */
+    color: #b388ff;
+    /* Yazı rengi mor */
+    border-color: #b388ff;
+    /* Kenarlık rengi değişmez */
+}
+
+#detailedSearchBtn {
+    background-color: rgb(73, 0, 121);
+    /* Üzerine gelince arka plan rengi */
+    height: 40px;
+
+    color: white;
+    margin-left: 10px;
+    border-color: rgb(73, 0, 121);
+    border-radius: 5px;
+}
+
+#detailedSearchBtn:hover {
+    background-color: #fff;
+    /* Butonun üzerine gelindiğinde arka plan rengi değişmez */
+    color: #b388ff;
+    /* Yazı rengi mor */
+    border-color: #b388ff;
+    /* Kenarlık rengi değişmez */
+}
+
+/* Text alanları ve dropdown menüsü için dark tema stil */
+.input-group-text {
+    border-radius: 5px;
+    background-color: #b388ff;
+    border: node;
+    border-width: 0;
+}
+
+#textInput::placeholder {
+    color: #8798a7;
+}
+
+.nav-link.active {
+    color: black !important;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    color: #d9c7f8;
+    /* Koyu gri arka plan */
+}
+
+.navbar-brand:hover {
+    color: #d9c7f8;
+}
+
+.nav-tabs {
+    color: #b388ff;
+}
+
+
+#chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#chat-toggle:hover {
+    background-color: #007bff;
+}
+
+#chat-toggle i {
+    color: white;
+}
+
+#chat-area {
+    position: fixed;
+    bottom: 70px;
+    right: 20px;
+    width: 500px;
+    z-index: 1000;
+}
+
+.hidden {
+    display: none;
+}
+
+.message {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.message .message-content {
+    padding: 10px;
+    border-radius: 5px;
+    max-width: 80%;
+}
+
+.message.user .message-content {
+    background-color: #b388ff;
+    color: white;
+    margin-left: auto;
+}
+
+.message.bot .message-content {
+    background-color: #f1f1f1;
+    color: black;
+    margin-right: auto;
+}
+
+
+
+#textInput,
+#startDateInput,
+#endDateInput,
+#patentSource {
+    background-color: #212529;
+    /* Arka plan rengi dark */
+    color: #ffffff;
+    /* Yazı rengi beyaz */
+    border: 1px solid #2c3e50;
+    margin-right: 10px;
+    /* Kenarlık rengi dark ile uyumlu */
+}
+
+/* Dropdown menüsü ok işareti rengi */
+#patentSource::after {
+    color: #ffffff;
+    /* Beyaz */
+}
+
+#textInput {
+    height: 40px;
+    border-radius: 5px;
+}

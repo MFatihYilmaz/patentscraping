@@ -1,0 +1,130 @@
+[
+    {
+        "No": "3",
+        "Link": "https://portal.turkpatent.gov.tr/anonim/arastirma/patent/sonuc/dosya?patentAppNo=2022/014391&documentsTpye=all",
+        "Keywords": "bakteriyel selüloz, kemik rejenerasyonu, greft materyalleri, hidroksiapatit, bioaktif ajanlar, kemik defektlerinde kullanımı",
+        "Technologies": [
+            {
+                "TechnologyTitle": "Bakteriyel Selüloz Üretimi",
+                "TechnologyDescription": "Komagataeibacter europaeus strain MOZ bakterisinin kullanıldığı bakteriyel selüloz üretim işlemi"
+            },
+            {
+                "TechnologyTitle": "Selüloz Saflaştırma",
+                "TechnologyDescription": "Bakteriyel selülozun saflaştırılması ve temizlenmesi işlemi"
+            }
+        ],
+        "Techniques": [
+            {
+                "TechniquesTitle": "Grafting Technique",
+                "TechniquesDescription": "Bakteriyel selülozun çeşitli greft materyalleri ile bir arada kullanılması tekniği"
+            },
+            {
+                "TechniquesTitle": "Incorporation of Bioactive Agents",
+                "TechniquesDescription": "Steril bir şekilde bioaktif ajanların bakteriyel selüloza eklenmesi tekniği"
+            }
+        ],
+        "Summary": "Bu buluş, esas olarak diş hekimliği alanı içerisindeki çeşitli kemik defekt tipleri için tasarlanmış olsada, tıp alanında da çeşitli kemik defektleri için kullanımı mümkündür. Maksiller sinüs augmentasyonlarında, çeşitli kemik içi defekt alanlarında, kemik içi kist cerrahileri sonrası defekt alanlarında, periimplantitis kemik defektlerinde ve vertikal/horizontal kemik augmentasyonlarında kullanılabilir.",
+        "patent_data": {
+            "index": 2,
+            "title": "SAF HALDE YA DA ÇEŞİTLİ AJANLARIN EMDİRİLMESİYLE ELDE EDİLEN VE KÜRESEL FORMDA ÜRETİLEN BAKTERİYEL SELÜLOZUN, TEK BAŞINA VE ÇEŞİTLİ GREFT MATERYALLERİ İLE BİR ARADA KULLANILARAK KEMİK REJENERASYONU AMACIYLA ÜRETİMİ VE KULLANIMI",
+            "pdf_link": "https://portal.turkpatent.gov.tr/anonim/arastirma/patent/sonuc/dosya?patentAppNo=2022/014391&documentsTpye=all",
+            "publish_date": "19.09.2022"
+        }
+    },
+    {
+        "No": "4",
+        "Link": "https://portal.turkpatent.gov.tr/anonim/arastirma/patent/sonuc/dosya?patentAppNo=2021/022128&documentsTpye=all",
+        "Keywords": "biyouyumlu malzemeler, kompozit membran, kemik rejenerasyonu, diş hekimliği, yeni üretim yöntemi, balık pulu, NaOH çözeltisi, ultrasonik banyo, sitrik asit, PEG 1000, liyofilizasyon",
+        "Technologies": [
+            {
+                "TechnologyTitle": "Kompozit Membran Üretimi",
+                "TechnologyDescription": "Ağız, diş ve çene cerrahi müdahaleleri için biyouyumlu malzemeler içeren kemik ara yüzeyinde kullanılabilen bir kompozit membranın üretim yöntemi."
+            },
+            {
+                "TechnologyTitle": "Ultrasonik Banyo",
+                "TechnologyDescription": "Kaynaktan alınan malzemelerin muamele edilmesinde kullanılan ultrasonik banyo tekniği."
+            }
+        ],
+        "Techniques": [
+            {
+                "TechniquesTitle": "Sonikasyon",
+                "TechniquesDescription": "Sıvı içindeki partiküllerin dağılması ve dispersiyon için ultrasonik enerjinin uygulandığı tekniğin kullanılması."
+            },
+            {
+                "TechniquesTitle": "Dekantasyon",
+                "TechniquesDescription": "Katkı maddelerinin veya çözünmeyen maddelerin bir çözeltiden ayrılması işlemi için dekantasyon tekniğinin kullanılması."
+            }
+        ],
+        "Summary": "Buluş, cerrahi müdahaleler için biyouyumlu malzemeler içeren ve kemik ara yüzünde kullanılabilecek nitelikte bir kompozit membran ve bunun üretim yöntemi ile ilgilidir. Buluşun amacı, yüksek oranda kollajen ve hidroksiapatit (HAP) karışımından oluşan ve mevcut şartlardaki membranlara göre canlı ile uyumluluğun arttırılmasını sağlayan bir biyomateriyal olan balık pulu kullanımı ile kompozit membran üretimi gerçekleştirmektir. Bu membranlar hem tek hem de çok katmanlı olarak üretilmiştir. 35062.40",
+        "patent_data": {
+            "index": 5,
+            "title": "DİŞ HEKİMLİĞİNDE YÖNLENDİRİLMİŞ KEMİK REJENERASYONU\nİŞLEMLERİ İÇİN YENİ BİR MEMBRAN ÜRETİMİ",
+            "pdf_link": "https://portal.turkpatent.gov.tr/anonim/arastirma/patent/sonuc/dosya?patentAppNo=2021/022128&documentsTpye=all",
+            "publish_date": "31.12.2021"
+        }
+    },
+    {
+        "No": "1",
+        "Link": "https://portal.turkpatent.gov.tr/anonim/arastirma/patent/sonuc/dosya?patentAppNo=2022/009965&documentsTpye=all",
+        "Keywords": "saç dökülmesi, alopesi areata, androgenetik alopesia, saç kökü besleme, kafa derisi besleme, egzema, akne tedavileri, skar, yara tedavisi, total inhalasyon, nörodejeneratif hastalıklar, inflamatuar hastalıklar",
+        "Technologies": [
+            {
+                "TechnologyTitle": "Amniyotik Sıvı Tabanlı Ürün Üretimi",
+                "TechnologyDescription": "Amniyotik sıvıdan elde edilen ürünlerin üretim yöntemi, saç dökülmesi, cilt problemleri ve diğer bazı hastalıkların tedavisinde kullanılan bir teknolojidir."
+            },
+            {
+                "TechnologyTitle": "Gamma Işınlarıyla Işınlanmış Ürünler",
+                "TechnologyDescription": "Ürünlerin korunması ve sterilizasyonu amacıyla gamma ışınlarıyla ışınlanması, ürünlerin kullanım ömrünü uzatan bir teknolojidir."
+            }
+        ],
+        "Techniques": [
+            {
+                "TechniquesTitle": "Amniyotik Sıvı Süzgeç Filtrasyonu",
+                "TechniquesDescription": "Amniyotik sıvıdaki istenmeyen partiküllerin ve mikroorganizmaların ayrılması için süzgeç filtrasyon tekniği kullanılır."
+            },
+            {
+                "TechniquesTitle": "Dondurma ve Işınlama",
+                "TechniquesDescription": "Ürünün uzun süreli saklanabilirliği ve sterilizasyon amacıyla dondurulması ve gamma radyasyonuyla ışınlanması tekniği kullanılır."
+            }
+        ],
+        "Summary": "Buluş saç dökülmesi, alopesi areata (saç kıran), androgenetik alopesia (AGA), saç kökü besleme, kafa derisi besleme, egzema, akne, skar ve yara dokusu tedavileri ile nörodejeneratif, inflamatuar hastalıklarda ve immun modulasyon amaçlı (insan doku ve sıvılarına ait inflamatuar, immunolojik yanıtın düzenlenmesi, rejenerasyon amaçlı) kullanılmak üzere geliştirilen bir ürünün üretim yöntemi ile ilgilidir. Buluş özellikle, saç dökülmesi, alopesi areata (saçkıran), androgenetik alopesia (AGA), saç kökü besleme, kafa derisi besleme, egzema, akne, skar dokusu ve yara tedavisi gibi rahatsızlıkların tedavisinde kullanılmak üzere geliştirilen, kimyasal içermeyen, amniyon sıvısı içeriğine sahip havuzlanarak standart hale getirildikten sonra dondurularak gama irradie edilen bir ürün üretimi için bir yöntem ile ilgilidir.",
+        "patent_data": {
+            "index": 3,
+            "title": "SAÇ KIRAN, ANDROGENETİK ALOPESİA, SKAR, NÖRODEJENERATİF, İNFLAMATUAR HASTALIKLARDA İMMUN MODULASYON VE REJENERASYON AMAÇLI KULLANILAN BİR ÜRÜNÜN ÜRETİMİ İÇİN BİR YÖNTEMİ",
+            "pdf_link": "https://portal.turkpatent.gov.tr/anonim/arastirma/patent/sonuc/dosya?patentAppNo=2022/009965&documentsTpye=all",
+            "publish_date": "15.06.2022"
+        }
+    },
+    {
+        "No": "2",
+        "Link": "https://portal.turkpatent.gov.tr/anonim/arastirma/patent/sonuc/dosya?patentAppNo=2022/014638&documentsTpye=all",
+        "Keywords": "sodyum reçinesi, su yumuşatma, tuzlu atık su, tuz kazanımı, çöktürme tankı, iyon değiştirme, magnezyum iyonları, kalsiyum iyonları, rejenere",
+        "Technologies": [
+            {
+                "TechnologyTitle": "Sert Su Yumuşatma Sistemi",
+                "TechnologyDescription": "Çevreye zarar vermeyen, karbon ayak izi düşük, düşük maliyetli, çamur oluşumunu minimuma indirgeyen ve atık su geri dönüşüm sistemlerinde inorganik tıkanmaları engelleyen bir sistemdir."
+            },
+            {
+                "TechnologyTitle": "Sodyum Reçinesi",
+                "TechnologyDescription": "Katyonik sodyum reçinesi, sert suyun içinde bulunan magnezyum ve kalsiyum iyonlarını gidermek için kullanılan bir malzemedir."
+            }
+        ],
+        "Techniques": [
+            {
+                "TechniquesTitle": "Sert Su Yumuşatma İşlemi",
+                "TechniquesDescription": "Su kaynağından alınan suyun sert su tankına alınması, sert suyun katyonik sodyum reçinesine çekilmesi, iyonların giderilmesi, yumuşak suyun üretim proseslerine temin edilmesi gibi adımları içeren bir işlemdir."
+            },
+            {
+                "TechniquesTitle": "Tuz Kazanımı ve Çöktürme",
+                "TechniquesDescription": "Tuz kazanımı/çöktürme tankında sertlik iyonlarına eşdeğer sodyum karbonat eklenerek kalsiyum karbonat ve magnezyum karbonat katılarının çökmesi sağlanır."
+            }
+        ],
+        "Summary": "Buluş, bir sert su yumuşatma sistemi ve bu sistemin çalışma yöntemi ile ilgilidir. Buluş, özellikle, bir kapalı devre iyon reçinesi ile su yumuşatma sistemi ve bu sistemin çalışma yöntemi ile ilgilidir. Buluşa konu sistemi ve bu sistemin çalışma yöntemi ile karbon ayak izi düşük, tuzlu rejenerasyon atık suların geri kazanımını sağlayan, düşük maliyetli bir su yumuşatma sistemi ve yöntemi sağlanmaktadır.",
+        "patent_data": {
+            "index": 1,
+            "title": "Kapalı devre iyon reçinesi rejenerasyonu ile su yumuşatma sistemi.",
+            "pdf_link": "https://portal.turkpatent.gov.tr/anonim/arastirma/patent/sonuc/dosya?patentAppNo=2022/014638&documentsTpye=all",
+            "publish_date": "23.09.2022"
+        }
+    }
+]
