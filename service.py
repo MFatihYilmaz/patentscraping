@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-OPENAI_API_KEY = "sk-proj-ZRvfvlDVbrNyTAvThS59T3BlbkFJ5kTOCZzvRrJwYyGVKE9r"
+OPENAI_API_KEY = "your_api_key_here"
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 def service(text):
